@@ -2,6 +2,10 @@ package udemy_exercises.cell_phone;
 
 class CellPhone {
 
+  public static void main(String[] args) {
+
+  }
+
 }
 
 /*

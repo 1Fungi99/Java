@@ -1,7 +1,11 @@
 package udemy_exercises.songs;
 
-class Album {
+public class Album {
 
+  public static void main(String[] args) {
+    Song s = new Song("Heart Bursts into Fire", "3.5");
+    System.out.println(s.returnTheReturn());
+  }
 }
 
 /*
