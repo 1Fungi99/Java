@@ -9,6 +9,18 @@ class Contact {
         this.name = name;
         this.num = num;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public static Contact createContact(String name, String num) {
+        return new Contact(name, num);
+    }
 }
 
 /*
