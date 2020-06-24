@@ -3,116 +3,68 @@ package udemy_exercises.bank;
 import java.util.*;
 
 public class Bank {
-  Scanner s = new Scanner(System.in);
+  private String name;
+  private ArrayList<Branch> branches;
 
-  public static void main(String[] args) {
-    ArrayList<Branch> branchList = new ArrayList<Branch>();
-    branchList.add(new Branch("Bank of America"));
-    branchList.add(new Branch("Chase"));
-    branchList.add(new Branch("Unify Credit Union"));
-    branchList.add(new Branch("Wells Fargo"));
-
-    //check to see what branches there are
-    // for (int i = 0; i < branchList.size(); i++) {
-    //   System.out.println(branchList.get(i).branchName);
-    // }
-
-    Bank B = new Bank();
-
-    B.menu(branchList);
-
+  public Bank(String name) {
+    this.name = name;
+    this.branches = new ArrayList<Branch>();
   }
 
-  void menu(ArrayList<Branch> branchList) {
-    int option = 0;
-    while (option != 5) {
+  public boolean addBranch(String branchName) {
+    if (findBranch(branchName) == null) {
+      this.branches.add(new Branch(branchName));
+      return true;
+    }
+    return false;
+  }
 
-      System.out.println("\n\nWhat would you like to do?");
-      System.out.println(
-          "Options: [ \n\t1. new customer,\n\t2. customer transaction,\n\t3. new branch,\n\t4. see branch information,\n\t5. quit\n\t ]\nEnter number:");
-      option = s.nextInt();
-      switch (option) {
-        case 1:
-          addCustomer(branchList);
-          break;
-        case 2:
-          newTransaction(branchList);
-          break;
-        case 3:
-          newBranch(branchList);
-          break;
-        case 4:
-          branchInformation(branchList);
-          break;
-        case 5:
-          System.out.println("Ending cmd... Thank you");
-          break;
-        default:
-          System.out.println("incorrect selection: Error... Ending cmd.");
-          break;
+  public boolean addCustomer(String branchName, String customerName, double initialAmount) {
+    Branch branch = findBranch(branchName);
+    if (branch != null) {
+      return branch.newCustomer(customerName, initialAmount);
+    }
+    return false;
+  }
+
+  public boolean addCustomerTransaction(String branchName, String customerName, double amount) {
+    Branch branch = findBranch(branchName);
+    if (branch != null) {
+      return branch.addCustomerTransaction(customerName, amount);
+    }
+    return false;
+  }
+
+  private Branch findBranch(String branchName) {
+    for (int i = 0; i < this.branches.size(); i++) {
+      Branch checkedBranch = this.branches.get(i);
+      if (checkedBranch.getName().equals(branchName)) {
+        return checkedBranch;
       }
     }
-
+    return null;
   }
 
-  void addCustomer(ArrayList<Branch> branchList) {
-    System.out.print("Adding new customer\nCustomer Name: ");
-    String customerName = s.next();
-    System.out.print("Initial Transaction: ");
-    int customerTransaction = s.nextInt();
-    while (customerTransaction <= 0) {
-      if (customerTransaction > 0) {
-        break;
-      } else {
-        System.out.println("Initial transaction is invalid. Please input a positive number.");
-        System.out.print("Initial Transaction:");
+  public boolean listCustomers(String branchName, boolean showTransactions) {
+    Branch branch = findBranch(branchName);
+    if (branch != null) {
+      System.out.println("Customer details for branch " + branch.getName());
 
-        customerTransaction = s.nextInt();
+      ArrayList<Customer> branchCustomers = branch.getCustomers();
+      for (int i = 0; i < branchCustomers.size(); i++) {
+        Customer branchCustomer = branchCustomers.get(i);
+        System.out.println("Customer " + branchCustomer.getName() + "[" + (i + 1) + "]");
+        if (showTransactions) {
+          System.out.println("Transactions");
+          ArrayList<Double> transactions = branchCustomer.getTransactions();
+          for (int j = 0; j < transactions.size(); j++) {
+            System.out.println("[" + (j + 1) + "] Amount " + transactions.get(j));
+          }
+        }
       }
-    }
-
-    System.out.println("\nNew Customer information:");
-    System.out.print("Customer Name:     ");
-    System.out.println(customerName);
-    System.out.print("Current Balance:   $");
-    System.out.println(customerTransaction + "\n\n");
-
-    System.out.println("Which Branch would you like to be placed in?");
-    for (int i = 0; i < branchList.size(); i++) {
-      int counter = i;
-      System.out.println("\t" + (counter + 1) + ". " + branchList.get(i).branchName);
-    }
-    System.out.println("Enter Number: ");
-    int branchSelect = s.nextInt();
-    System.out.println("Routing to Menu...\n");
-
-  }
-
-  void newTransaction(ArrayList<Branch> branchList) {
-    System.out.println("Add transaction to customer");
-  }
-
-  void newBranch(ArrayList<Branch> branchList) {
-
-    System.out.println("Adding a new branch\n\nCurrent branches:");
-    for (int i = 0; i < branchList.size(); i++) {
-      int counter = i;
-      System.out.println("\t" + (counter + 1) + ". " + branchList.get(i).branchName);
-    }
-    System.out.print("New branch name: ");
-    String bName = s.next();
-    while (bName != "") {
-
-    }
-
-  }
-
-  void branchInformation(ArrayList<Branch> branchList) {
-    System.out.println("Branch information");
-    System.out.println("Current branches:");
-    for (int i = 0; i < branchList.size(); i++) {
-      int counter = i;
-      System.out.println("\t" + (counter + 1) + ". " + branchList.get(i).branchName);
+      return true;
+    } else {
+      return false;
     }
   }
 
