@@ -2,20 +2,21 @@ package udemy_exercises.songs;
 
 public class Song {
   private String title;
-  private String duration;
+  private double duration;
 
-  public Song(String title, String duration) {
+  public Song(String title, double duration) {
     this.title = title;
     this.duration = duration;
 
   }
 
-  private String returnSongData() {
-    return "Song Name: " + this.title + " Duration: " + this.duration + " min";
+  public String getTitle() {
+    return title;
   }
 
-  public String returnTheReturn() {
-    return returnSongData();
+  @Override
+  public String toString() {
+    return this.title + " => " + this.duration + " min.";
   }
 }
 
